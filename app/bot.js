@@ -7,20 +7,18 @@ const flickrHandler = require('./flickrHandler')
 const ForecastHandler = require('./forecastHandler')
 const forecastHandler = new ForecastHandler(onKpAlert)
 
-const PHOTO_COMMAND = 'Photo of the Aurora Borealis.'
-const VISIBILITY_COMMAND = 'Current visibility of the Aurora.'
-const SCHEDULE_ALERT_COMMAND = 'Schedule visibility alert.'
-const CANCEL_ALERT_COMMAND = 'Unschedule from any alerts.'
+const PHOTO_COMMAND = '🌌 Aurora photo'
+const VISIBILITY_COMMAND = '🔎  Visibility'
+const SCHEDULE_ALERT_COMMAND = '🔔 Schedule alert'
+const CANCEL_ALERT_COMMAND = '🔕 Unschedule alerts'
 const KP_PHOTO = 'https://www.whelancameras.ie/image/data/Article/image%202.jpg'
 
 const options = {
     "parse_mode": "Markdown",
     "reply_markup": JSON.stringify({
         "keyboard": [
-            [{text: PHOTO_COMMAND}],
-            [{text: VISIBILITY_COMMAND}],
-            [{text: SCHEDULE_ALERT_COMMAND}],
-            [{text: CANCEL_ALERT_COMMAND}]
+            [{text: PHOTO_COMMAND}, {text: VISIBILITY_COMMAND}],
+            [{text: SCHEDULE_ALERT_COMMAND}, {text: CANCEL_ALERT_COMMAND}]
         ],
         "one_time_keyboard": true
     })
@@ -30,15 +28,9 @@ const kpOptions = {
     reply_markup: JSON.stringify({
         one_time_keyboard: true,
         keyboard: [
-            [{ text: "1" },
-            { text: "2" },
-            { text: "3" },
-            { text: "4" },
-            { text: "5" },
-            { text: "6" },
-            { text: "7" },
-            { text: "8" }
-            ]
+            [{ text: '1' }, { text: '2' }, { text: '3'}],
+            [{ text: '4' }, { text: '5' }, { text: '6'}],
+            [{ text: '7' }, { text: '8' }]
         ]
     })
 }
@@ -81,7 +73,7 @@ bot.onText(new RegExp(CANCEL_ALERT_COMMAND), msg => {
 
 bot.onText(new RegExp(SCHEDULE_ALERT_COMMAND), msg => {
     bot.sendPhoto(msg.from.id, KP_PHOTO).then(() => {
-        bot.sendMessage(msg.from.id, 'Choose which Kp you\'d like to be informed about:', kpOptions)
+        bot.sendMessage(msg.from.id, 'Choose which Kp index you\'d like to be informed about:', kpOptions)
         alertInput = true
     })
 })
@@ -97,7 +89,7 @@ bot.on('message', msg => {
             const value = parseInt(msg.text)
             if (value > 0 && value <= 8) {
                 forecastHandler.registerForAlerts(msg.from.first_name, msg.from.id, value)
-                return bot.sendMessage(msg.from.id, `Ok, ${msg.from.first_name}, I will alert you when Kp is ${value}.`, options)
+                return bot.sendMessage(msg.from.id, `Ok, ${msg.from.first_name}, I will alert you when Kp reaches ${value}.`, options)
             }
         }
         bot.sendMessage(msg.from.id, 'Unrecognized answer. Please choose what you\'d like to do:', options)
