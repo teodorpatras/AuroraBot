@@ -14,9 +14,12 @@ const CANCEL_ALERT_COMMAND = '🔕 Unschedule alert'
 const LIVE_PHOTO_COMMAND = '📷 Live photo'
 const KP_PHOTO = 'https://www.whelancameras.ie/image/data/Article/image%202.jpg'
 
-const FINLAND_OPTION_CAM = '🇫🇮 Finland'
-const SWEDEN_OPTION_CAM = '🇸🇪 Sweden'
-const NORWAY_OPTION_CAM = '🇳🇴 Norway'
+const FINLAND_OPTION_CAM_1 = '🇫🇮 Finland #1'
+const FINLAND_OPTION_CAM_2 = '🇫🇮 Finland #2'
+const SWEDEN_OPTION_CAM_1 = '🇸🇪 Sweden #1'
+const SWEDEN_OPTION_CAM_2 = '🇸🇪 Sweden #2'
+const NORWAY_OPTION_CAM_1 = '🇳🇴 Norway #1'
+const NORWAY_OPTION_CAM_2 = '🇳🇴 Norway #2'
 
 const options = {
     reply_markup: JSON.stringify({
@@ -33,9 +36,9 @@ const camOptions = {
     reply_markup: JSON.stringify({
         one_time_keyboard: true,
         keyboard: [
-            [{text: FINLAND_OPTION_CAM}],
-            [{text: NORWAY_OPTION_CAM}],
-            [{text: SWEDEN_OPTION_CAM}]
+            [{text: FINLAND_OPTION_CAM_1}, {text: FINLAND_OPTION_CAM_2}],
+            [{text: NORWAY_OPTION_CAM_1}, {text: NORWAY_OPTION_CAM_2}],
+            [{text: SWEDEN_OPTION_CAM_1}, {text: SWEDEN_OPTION_CAM_2}]
         ]
     })
 }
@@ -151,9 +154,12 @@ function invalidateInputs() {
 
 function getLivePhotos() {
     var dict = {}
-    dict[SWEDEN_OPTION_CAM] = {url: `http://uk.jokkmokk.jp/photo/nr3/latest.jpg?${Math.random()}`, location: 'Porjus, Jokkmokk, Sweden'}
-    dict[FINLAND_OPTION_CAM] = {url: `http://aurora.fmi.fi/public_service/latest_DYN.jpg?${Math.random()}`, location: 'Helsinki, Finland'}
-    dict[NORWAY_OPTION_CAM] = {url: `http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg?${Math.random()}`, location: 'Tromsø, Norway'}
+    dict[SWEDEN_OPTION_CAM_1] = {url: `http://uk.jokkmokk.jp/photo/nr3/latest.jpg?${Math.random()}`, location: 'Porjus, Jokkmokk, Sweden'}
+    dict[SWEDEN_OPTION_CAM_2] = {url: `http://www.aurora-service.eu/scripts/images/kiruna_aurora_sky_camera.jpg?${Math.random()}`, location: 'Kiruna, Sweden'}
+    dict[FINLAND_OPTION_CAM_1] = {url: `http://aurora.fmi.fi/public_service/latest_DYN.jpg?${Math.random()}`, location: 'Helsinki, Finland'}
+    dict[FINLAND_OPTION_CAM_2] = {url: `http://www.sgo.fi/Data/RealTime/Kuvat/UCL.jpg?${Math.random()}`, location: 'Sodankylä, Finland'}
+    dict[NORWAY_OPTION_CAM_1] = {url: `http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg?${Math.random()}`, location: 'Tromsø, Norway'}
+    dict[NORWAY_OPTION_CAM_2] = {url: `http://polaris.nipr.ac.jp/~acaurora/aurora/Longyearbyen/latest.jpg?${Math.random()}`, location: 'Svalbard Islands, Norway'}
     return dict
 }
 
