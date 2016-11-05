@@ -20,7 +20,15 @@ connect(app, port).then(() => {
   console.log(`App is running on port ${port}`)
   return dbHandler.connect()
 }).then(() => {
-    console.log('Successfully connected to Mongo!')
+  console.log('Successfully connected to Mongo!')
 }).catch(err => {
-    console.error('Error: ' + err)
+  console.error('Error: ' + err)
 })
+
+// prevent Dyno from going to sleep
+const CronJob = require('cron').CronJob
+const request = require('request')
+
+new CronJob('*/15 * * * *', () => {
+  request('https://aurorabot.herokuapp.com/')
+}, null, false, 'America/Los_Angeles')
