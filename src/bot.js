@@ -131,7 +131,9 @@ bot.on('message', msg => {
         camInput = false
         const photos = getLivePhotos()
         if (photos[msg.text]) {
-            return bot.sendPhoto(msg.from.id, photos[msg.text].url).then(() => {
+            return bot.sendChatAction(msg.from.id, 'typing').then(() => {
+                return bot.sendPhoto(msg.from.id, photos[msg.text].url)
+            }).then(() => {
                 const text = `Here's a photo from ${photos[msg.text].location}.`
                 bot.sendMessage(msg.from.id, text, options)
             })
