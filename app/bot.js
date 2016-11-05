@@ -11,7 +11,7 @@ const PHOTO_COMMAND = 'Photo of the Aurora Borealis.'
 const VISIBILITY_COMMAND = 'Current visibility of the Aurora.'
 const SCHEDULE_ALERT_COMMAND = 'Schedule visibility alert.'
 const CANCEL_ALERT_COMMAND = 'Unschedule from any alerts.'
-const KP_PHOTO = 'http://www.aurora-service.eu/wp-content/uploads/2013/08/kp-map.png'
+const KP_PHOTO = 'https://www.whelancameras.ie/image/data/Article/image%202.jpg'
 
 const options = {
     "parse_mode": "Markdown",
