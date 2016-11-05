@@ -31,4 +31,4 @@ const request = require('request')
 
 new CronJob('*/15 * * * *', () => {
   request('https://aurorabot.herokuapp.com/')
-}, null, false, 'America/Los_Angeles')
+}, null, true, 'America/Los_Angeles')
