@@ -52,7 +52,7 @@ bot.onText(new RegExp(VISIBILITY_COMMAND), msg => {
         const arrowDown = '🔻'
         const arrowUp = '🔺'
         var message = `Current Kp index is ${forecast.nextH}`
-        if (forecast.next4H == nexth) {
+        if (forecast.next4H == forecast.nextH) {
             message += ' without major changes within the next 4h.'
         } else if (forecast.next4H < forecast.nextH) {
             message += ` and within the next 4h it will decrease to ${forecast.next4H} ${arrowDown}.`
