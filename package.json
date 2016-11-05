@@ -1,0 +1,24 @@
+{
+  "name": "aurora",
+  "version": "0.0.1",
+  "description": "Bot for getting Aurora Borealis predictions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./app/bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teodorpatras/AuroraBot.git"
+  },
+  "author": "Teodor Patras",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teodorpatras/AuroraBot/issues"
+  },
+  "homepage": "https://github.com/teodorpatras/AuroraBot#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "0.24.0",
+    "request": "2.78.0"
+  }
+}
