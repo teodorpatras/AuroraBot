@@ -149,9 +149,9 @@ function invalidateInputs() {
 
 function getLivePhotos() {
     var dict = {}
-    dict[SWEDEN_OPTION_CAM] = {url: 'http://uk.jokkmokk.jp/photo/nr3/latest.jpg', location: 'Porjus, Jokkmokk, Sweden'}
-    dict[FINLAND_OPTION_CAM] = {url: 'http://aurora.fmi.fi/public_service/latest_DYN.jpg', location: 'Helsinki, Finland'}
-    dict[NORWAY_OPTION_CAM] = {url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg', location: 'Tromsø, Norway'}
+    dict[SWEDEN_OPTION_CAM] = {url: `http://uk.jokkmokk.jp/photo/nr3/latest.jpg?${Math.random()}`, location: 'Porjus, Jokkmokk, Sweden'}
+    dict[FINLAND_OPTION_CAM] = {url: `http://aurora.fmi.fi/public_service/latest_DYN.jpg?${Math.random()}`, location: 'Helsinki, Finland'}
+    dict[NORWAY_OPTION_CAM] = {url: `http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg?${Math.random()}`, location: 'Tromsø, Norway'}
     return dict
 }
 
