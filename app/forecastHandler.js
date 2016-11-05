@@ -17,8 +17,8 @@ const chatModel = require('./db/models/chat.js')
 
 const ALERT_INTERVAL = 60 * 60 * 1000 
 
-dbHandler.connect().then(address => {
-    console.log('Successfully connected to Mongo at ' + address)
+dbHandler.connect().then(() => {
+    console.log('Successfully connected to Mongo!')
 }).catch(err => {
     console.error('Could not connect to mongoDB: ' + err)
 })
