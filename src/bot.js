@@ -62,7 +62,7 @@ var camInput = false
 bot.onText(new RegExp(LIVE_PHOTO_COMMAND), msg => {
     invalidateInputs()
     console.info(`[MSG] Live photo request from ${msg.from.first_name}`)
-    const text = 'Choose a cam from one of these regions:'
+    const text = 'Choose a sky camera:'
     bot.sendMessage(msg.from.id, text, camOptions)
     camInput = true
 })
