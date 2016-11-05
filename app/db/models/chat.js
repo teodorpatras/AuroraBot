@@ -7,6 +7,7 @@ const ChatSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    user: String,
     kp: Number,
     alertedAt: Date
 })

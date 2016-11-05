@@ -96,7 +96,7 @@ bot.on('message', msg => {
         if (!isNaN(parseInt(msg.text))) {
             const value = parseInt(msg.text)
             if (value > 0 && value <= 8) {
-                forecastHandler.registerForAlerts(msg.from.id, value)
+                forecastHandler.registerForAlerts(msg.from.first_name, msg.from.id, value)
                 return bot.sendMessage(msg.from.id, `Ok, ${msg.from.first_name}, I will alert you when Kp is ${value}.`, options)
             }
         }

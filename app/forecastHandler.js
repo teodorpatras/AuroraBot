@@ -43,16 +43,17 @@ var handler = function (alertCallback) {
         job = null
     }
 
-    this.registerForAlerts = function (chatId, kp) {
+    this.registerForAlerts = function (user, chatId, kp) {
         chatModel.findOne({chatId}, (err, chat) => {
             if (chat) {
                 chat.kp = kp
+                chat.user = user
                 chat.alertedAt = null
                 chat.save(err => {
                     if (err) { console.error('Error on re-saving model: ' + err) }
                 })
             } else {
-                chatModel.create({chatId, kp}, (err, chat) => {
+                chatModel.create({user, chatId, kp}, (err, chat) => {
                     if (err) { return console.error('Error while creating model: ' + err) }
                 })
             }
