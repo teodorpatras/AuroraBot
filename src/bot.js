@@ -131,7 +131,10 @@ bot.on('message', msg => {
         camInput = false
         const photos = getLivePhotos()
         if (photos[msg.text]) {
-            return bot.sendPhoto(msg.from.id, photos[msg.text], options)
+            return bot.sendPhoto(msg.from.id, photos[msg.text].url).then(() => {
+                const text = `Here's a photo from ${photos[msg.text].location}.`
+                bot.sendMessage(msg.from.id, text, options)
+            })
         }
         return sendUnrecognizedMessage(msg.from.id)
     }
@@ -146,9 +149,9 @@ function invalidateInputs() {
 
 function getLivePhotos() {
     var dict = {}
-    dict[SWEDEN_OPTION_CAM] = 'http://uk.jokkmokk.jp/photo/nr3/latest.jpg'
-    dict[FINLAND_OPTION_CAM] = 'http://aurora.fmi.fi/public_service/latest_DYN.jpg'
-    dict[NORWAY_OPTION_CAM] = 'http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg'
+    dict[SWEDEN_OPTION_CAM] = {url: 'http://uk.jokkmokk.jp/photo/nr3/latest.jpg', location: 'Porjus, Jokkmokk, Sweden'}
+    dict[FINLAND_OPTION_CAM] = {url: 'http://aurora.fmi.fi/public_service/latest_DYN.jpg', location: 'Helsinki, Finland'}
+    dict[NORWAY_OPTION_CAM] = {url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg', location: 'Tromsø, Norway'}
     return dict
 }
 
