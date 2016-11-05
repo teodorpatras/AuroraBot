@@ -11,14 +11,31 @@ const PHOTO_COMMAND = '🌌 Aurora photo'
 const VISIBILITY_COMMAND = '🔎  Visibility'
 const SCHEDULE_ALERT_COMMAND = '🔔 Schedule alert'
 const CANCEL_ALERT_COMMAND = '🔕 Unschedule alert'
+const LIVE_PHOTO_COMMAND = '📷 Live photo'
 const KP_PHOTO = 'https://www.whelancameras.ie/image/data/Article/image%202.jpg'
+
+const FINLAND_OPTION_CAM = '🇫🇮 Finland'
+const SWEDEN_OPTION_CAM = '🇸🇪 Sweden'
+const NORWAY_OPTION_CAM = '🇳🇴 Norway'
 
 const options = {
     reply_markup: JSON.stringify({
         one_time_keyboard: true,
         keyboard: [
             [{text: PHOTO_COMMAND}, {text: VISIBILITY_COMMAND}],
-            [{text: SCHEDULE_ALERT_COMMAND}, {text: CANCEL_ALERT_COMMAND}]
+            [{text: SCHEDULE_ALERT_COMMAND}, {text: CANCEL_ALERT_COMMAND}],
+            [{text: LIVE_PHOTO_COMMAND}]
+        ]
+    })
+}
+
+const camOptions = {
+    reply_markup: JSON.stringify({
+        one_time_keyboard: true,
+        keyboard: [
+            [{text: FINLAND_OPTION_CAM}],
+            [{text: NORWAY_OPTION_CAM}],
+            [{text: SWEDEN_OPTION_CAM}]
         ]
     })
 }
@@ -35,10 +52,20 @@ const kpOptions = {
 }
 
 var alertInput = false
+var camInput = false
 
 // Event handling
+
+bot.onText(new RegExp(LIVE_PHOTO_COMMAND), msg => {
+    invalidateInputs()
+    console.info(`[MSG] Live photo request from ${msg.from.first_name}`)
+    const text = 'Choose a cam from one of these regions:'
+    bot.sendMessage(msg.from.id, text, camOptions)
+    camInput = true
+})
+
 bot.onText(new RegExp(VISIBILITY_COMMAND), msg => {
-    console.info(`[MSG]Visibility check from ${msg.from.first_name}`)
+    console.info(`[MSG] Visibility check from ${msg.from.first_name}`)
     bot.sendPhoto(msg.from.id, KP_PHOTO).then(() => {
         const forecast = forecastHandler.getForecast()
         const arrowDown = '🔻'
@@ -56,7 +83,7 @@ bot.onText(new RegExp(VISIBILITY_COMMAND), msg => {
 })
 
 bot.onText(new RegExp(PHOTO_COMMAND), msg => {
-    console.info(`[MSG]Send photo to ${msg.from.first_name}`)
+    console.info(`[MSG] Send photo to ${msg.from.first_name}`)
     bot.sendChatAction(msg.from.id, 'typing').then(() => {
         return flickrHandler.fetchRandomPhoto()
     }).then(result => {
@@ -68,14 +95,15 @@ bot.onText(new RegExp(PHOTO_COMMAND), msg => {
 })
 
 bot.onText(new RegExp(CANCEL_ALERT_COMMAND), msg => {
-    console.info(`[MSG]Cancel alert from ${msg.from.first_name}`)
+    console.info(`[MSG] Cancel alert from ${msg.from.first_name}`)
     const text = `Ok ${msg.from.first_name}, I won't be sending you any more alerts!`
     bot.sendMessage(msg.from.id, text, options)
     forecastHandler.deregisterFromAlerts(msg.from.id)
 })
 
 bot.onText(new RegExp(SCHEDULE_ALERT_COMMAND), msg => {
-    console.info(`[MSG]Schedule alert for ${msg.from.first_name}`)
+    invalidateInputs()
+    console.info(`[MSG] Schedule alert for ${msg.from.first_name}`)
     bot.sendPhoto(msg.from.id, KP_PHOTO).then(() => {
         const text = 'Choose which Kp index you\'d like to be informed about:'
         bot.sendMessage(msg.from.id, text, kpOptions)
@@ -84,27 +112,54 @@ bot.onText(new RegExp(SCHEDULE_ALERT_COMMAND), msg => {
 })
 
 bot.onText(/\/start/, (msg, match) => {
-    console.info(`[MSG]/start from ${msg.from.first_name}`)
+    console.info(`[MSG] /start from ${msg.from.first_name}`)
     const text = `Hey ${msg.from.first_name}! What would you like to do?`
     bot.sendMessage(msg.from.id, text, options)
 })
 
 bot.on('message', msg => {
-    if (!alertInput) { return }
-    alertInput = false
-    const value = parseInt(msg.text)
-    if (value > 0 && value <= 8) {
-        forecastHandler.registerForAlerts(msg.from.first_name, msg.from.id, value)
-        const text = `Ok, ${msg.from.first_name}, I will alert you when Kp reaches ${value}.`
-        return bot.sendMessage(msg.from.id, text, options)
+    if (alertInput) {
+        alertInput = false
+        const value = parseInt(msg.text)
+        if (value > 0 && value <= 8) {
+            forecastHandler.registerForAlerts(msg.from.first_name, msg.from.id, value)
+            const text = `Ok, ${msg.from.first_name}, I will alert you when Kp reaches ${value}.`
+            return bot.sendMessage(msg.from.id, text, options)
+        }
+        sendUnrecognizedMessage(msg.from.id)
+    } else if (camInput) {
+        camInput = false
+        const photos = getLivePhotos()
+        if (photos[msg.text]) {
+            return bot.sendPhoto(msg.from.id, photos[msg.text], options)
+        }
+        return sendUnrecognizedMessage(msg.from.id)
     }
-    const text = 'Unrecognized answer. Please choose what you\'d like to do:'
-    bot.sendMessage(msg.from.id, text, options)
 })
+
+// Helper functions
+
+function invalidateInputs() {
+    alertInput = false
+    camInput = false
+}
+
+function getLivePhotos() {
+    var dict = {}
+    dict[SWEDEN_OPTION_CAM] = 'http://uk.jokkmokk.jp/photo/nr3/latest.jpg'
+    dict[FINLAND_OPTION_CAM] = 'http://aurora.fmi.fi/public_service/latest_DYN.jpg'
+    dict[NORWAY_OPTION_CAM] = 'http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg'
+    return dict
+}
+
+function sendUnrecognizedMessage(chatId) {
+    const text = 'Unrecognized answer. Please choose what you\'d like to do:'
+    bot.sendMessage(chatId, text, options)
+}
 
 function onKpAlert(chats, kp) {
     chats.forEach(chat => {
-        console.info(`[MSG]Send alert to ${chat.user}`)
+        console.info(`[MSG] Send alert to ${chat.user}`)
         const text = `⚠️ Alert! ⚠️ Alert! Current Kp is ${kp}!`
         bot.sendMessage(chat.chatId, text)
     })
