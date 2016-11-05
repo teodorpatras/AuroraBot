@@ -135,7 +135,7 @@ bot.on('message', msg => {
         const photos = getLivePhotos()
         if (photos[msg.text]) {
             return bot.sendChatAction(msg.from.id, 'typing').then(() => {
-                return bot.sendPhoto(msg.from.id, photos[msg.text].url)
+                return bot.sendPhoto(msg.from.id, `${photos[msg.text].url}?${Math.random()}`)
             }).then(() => {
                 const text = `Here's a photo from ${photos[msg.text].location}.`
                 bot.sendMessage(msg.from.id, text, options)
@@ -154,12 +154,12 @@ function invalidateInputs() {
 
 function getLivePhotos() {
     var dict = {}
-    dict[SWEDEN_OPTION_CAM_1] = {url: `http://uk.jokkmokk.jp/photo/nr3/latest.jpg?${Math.random()}`, location: 'Porjus, Jokkmokk, Sweden'}
-    dict[SWEDEN_OPTION_CAM_2] = {url: `http://www.aurora-service.eu/scripts/images/kiruna_aurora_sky_camera.jpg?${Math.random()}`, location: 'Kiruna, Sweden'}
-    dict[FINLAND_OPTION_CAM_1] = {url: `http://aurora.fmi.fi/public_service/latest_DYN.jpg?${Math.random()}`, location: 'Helsinki, Finland'}
-    dict[FINLAND_OPTION_CAM_2] = {url: `http://www.sgo.fi/Data/RealTime/Kuvat/UCL.jpg?${Math.random()}`, location: 'Sodankylä, Finland'}
-    dict[NORWAY_OPTION_CAM_1] = {url: `http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg?${Math.random()}`, location: 'Tromsø, Norway'}
-    dict[NORWAY_OPTION_CAM_2] = {url: `http://polaris.nipr.ac.jp/~acaurora/aurora/Longyearbyen/latest.jpg?${Math.random()}`, location: 'Svalbard Islands, Norway'}
+    dict[SWEDEN_OPTION_CAM_1] = {url: 'http://uk.jokkmokk.jp/photo/nr3/latest.jpg', location: 'Porjus, Jokkmokk, Sweden'}
+    dict[SWEDEN_OPTION_CAM_2] = {url: 'http://www.aurora-service.eu/scripts/images/kiruna_aurora_sky_camera.jpg', location: 'Kiruna, Sweden'}
+    dict[FINLAND_OPTION_CAM_1] = {url: 'http://aurora.fmi.fi/public_service/latest_DYN.jpg', location: 'Helsinki, Finland'}
+    dict[FINLAND_OPTION_CAM_2] = {url: 'http://www.sgo.fi/Data/RealTime/Kuvat/UCL.jpg', location: 'Sodankylä, Finland'}
+    dict[NORWAY_OPTION_CAM_1] = {url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg', location: 'Tromsø, Norway'}
+    dict[NORWAY_OPTION_CAM_2] = {url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Longyearbyen/latest.jpg', location: 'Svalbard Islands, Norway'}
     return dict
 }
 
