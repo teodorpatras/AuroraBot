@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
-const address = process.env.MONGODB_URI || 'mongodb://admin:nimda@ds139187.mlab.com:39187/aurorabot'
+const address = process.env.MONGODB_URI
 var connected = false
 
 function connect() {    

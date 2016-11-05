@@ -5,7 +5,7 @@ const request = require('request')
 const FLICKR_PHOTOS = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&tags=aurora+borealis&format=json&nojsoncallback=1'
 const FLICKR_PHOTO_SIZES = 'https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&format=json&nojsoncallback=1'
 const FLICKR_PHOTO_INFO = 'https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&format=json&nojsoncallback=1'
-const FLICKR_API_KEY = '&api_key=6d19c35b9bcd252232706b369ddbd27f'
+const FLICKR_API_KEY = `&api_key=${process.env.FLICKR_API_KEY}`
 
 const DEFAULT_PHOTO = 'http://www.nasa.gov/sites/default/files/thumbnails/image/20150409-10-sebastiansaarloos.jpg'
 const DEFAULT_USERNAME = 'Sebastian Saarlos'

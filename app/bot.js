@@ -84,7 +84,7 @@ bot.onText(new RegExp(SCHEDULE_ALERT_COMMAND), msg => {
 
 bot.onText(/\/start/, (msg, match) => {
     console.info(`[MSG]/start from ${msg.from.first_name}`)
-    bot.sendMessage(msg.from.id, `Hey ${msg.from.first_name}. What would you like to do?`, options)
+    bot.sendMessage(msg.from.id, `Hey ${msg.from.first_name}! What would you like to do?`, options)
 })
 
 bot.on('message', msg => {
