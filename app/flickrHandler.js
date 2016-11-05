@@ -20,7 +20,7 @@ function fetchPhotoId() {
                 const index = Math.floor(Math.random() * photos.length)
                 resolve(photos[index].id)
             } catch (err) {
-                console.log('Error at fetchPhotoId -- ' + err)
+                console.error('Error at fetchPhotoId -- ' + err)
                 reject(err)
             }
         })
@@ -42,7 +42,7 @@ function fetchURLfor(photoId) {
                 }
                 resolve(sizes[sizes.length - 1].source)
             } catch (err) {
-                console.log('Error at fetchURL -- ' + err)
+                console.error('Error at fetchURL -- ' + err)
                 reject(err)
             }
         })
@@ -58,7 +58,7 @@ function fetchUsernameFor(photoId) {
             try {
                 resolve(body.photo.owner.username)
             } catch (err) {
-                console.log('Error at fetchUsername -- ' + err)
+                console.error('Error at fetchUsername -- ' + err)
                 reject(err)
             }
         })

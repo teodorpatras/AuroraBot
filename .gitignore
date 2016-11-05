@@ -3,6 +3,10 @@ logs
 *.log
 npm-debug.log*
 
+.env 
+
+start.sh
+
 # Runtime data
 pids
 *.pid

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./app/bot.js"
+    "start": "node ./app/app.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/teodorpatras/AuroraBot#readme",
   "dependencies": {
+    "cron": "1.1.1",
+    "express": "4.14.0",
+    "mongoose": "4.6.6",
     "node-telegram-bot-api": "0.24.0",
     "request": "2.78.0"
   }
