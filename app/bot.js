@@ -39,6 +39,7 @@ var alertInput = false
 
 // Event handling
 bot.onText(new RegExp(VISIBILITY_COMMAND), msg => {
+    console.info(`[MSG]Visibility check from ${msg.from.first_name}`)
     bot.sendPhoto(msg.from.id, KP_PHOTO).then(() => {
         const forecast = forecastHandler.getForecast()
         const arrowDown = '🔻'
@@ -56,9 +57,10 @@ bot.onText(new RegExp(VISIBILITY_COMMAND), msg => {
 })
 
 bot.onText(new RegExp(PHOTO_COMMAND), msg => {
+    console.info(`[MSG]Send photo to ${msg.from.first_name}`)
     bot.sendChatAction(msg.from.id, 'typing').then(() => {
         flickrHandler.fetchRandomPhoto((photo, owner) => {
-           console.log('Sent photo: ' + photo + ' by ' + owner)
+            console.log(`Sent photo by ${owner} to ${msg.from.first_name}`)
             bot.sendPhoto(msg.from.id, photo).then(() => {
                 bot.sendMessage(msg.from.id, `A gorgeous photo by ${owner.replace(/[^a-zA-Z ]/g, "")}.`, options)
             })
@@ -67,11 +69,13 @@ bot.onText(new RegExp(PHOTO_COMMAND), msg => {
 })
 
 bot.onText(new RegExp(CANCEL_ALERT_COMMAND), msg => {
+    console.info(`[MSG]Cancel alert from ${msg.from.first_name}`)
     bot.sendMessage(msg.from.id, `Ok ${msg.from.first_name}, I won't be sending you any more alerts!`, options)
     forecastHandler.deregisterFromAlerts(msg.from.id)
 })
 
 bot.onText(new RegExp(SCHEDULE_ALERT_COMMAND), msg => {
+    console.info(`[MSG]Schedule alert for ${msg.from.first_name}`)
     bot.sendPhoto(msg.from.id, KP_PHOTO).then(() => {
         bot.sendMessage(msg.from.id, 'Choose which Kp index you\'d like to be informed about:', kpOptions)
         alertInput = true
@@ -79,6 +83,7 @@ bot.onText(new RegExp(SCHEDULE_ALERT_COMMAND), msg => {
 })
 
 bot.onText(/\/start/, (msg, match) => {
+    console.info(`[MSG]/start from ${msg.from.first_name}`)
     bot.sendMessage(msg.from.id, `Hey ${msg.from.first_name}. What would you like to do?`, options)
 })
 
@@ -98,6 +103,7 @@ bot.on('message', msg => {
 
 function onKpAlert(chats, kp) {
     chats.forEach(chat => {
+        console.info(`[MSG]Send alert to ${chat.user}`)
         bot.sendMessage(chat.chatId, `⚠️ Alert! ⚠️ Alert! Current Kp is ${kp}!`)
     })
 }
