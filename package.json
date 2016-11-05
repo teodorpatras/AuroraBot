@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./app/app.js"
+    "start": "node ./src/app.js",
+    "lint": "eslint ./src/"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,24 @@
     "mongoose": "4.6.6",
     "node-telegram-bot-api": "0.24.0",
     "request": "2.78.0"
+  },
+  "devDependencies": {
+    "chai": "3.5.0",
+    "eslint": "3.7.1",
+    "mocha": "3.1.2",
+    "node-inspector": "0.12.8",
+    "request": "2.75.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "rules": {
+      "semi": [
+        "error",
+        "never"
+      ]
+    }
   }
 }

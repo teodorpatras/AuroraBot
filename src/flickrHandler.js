@@ -65,13 +65,15 @@ function fetchUsernameFor(photoId) {
     })
 }
 
-function fetchRandomPhoto(completion) {
-    fetchPhotoId().then(photoId => {
-        return Promise.all([fetchURLfor(photoId), fetchUsernameFor(photoId)])
-    }).then(values => {
-        completion(values[0], values[1])
-    }).catch(reason => {
-        completion(DEFAULT_PHOTO, DEFAULT_USERNAME)
+function fetchRandomPhoto() {
+    return new Promise((resolve, reject) => {
+        fetchPhotoId().then(photoId => {
+            return Promise.all([fetchURLfor(photoId), fetchUsernameFor(photoId)])
+        }).then(values => {
+            resolve({photo: values[0], owner: values[1].replace(/[^a-zA-Z ]/g, "")})
+        }).catch(reason => {
+            resolve({photo: DEFAULT_PHOTO, owner: DEFAULT_USERNAME})
+        })
     })
 }
 

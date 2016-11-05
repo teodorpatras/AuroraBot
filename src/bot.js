@@ -10,17 +10,16 @@ const forecastHandler = new ForecastHandler(onKpAlert)
 const PHOTO_COMMAND = '🌌 Aurora photo'
 const VISIBILITY_COMMAND = '🔎  Visibility'
 const SCHEDULE_ALERT_COMMAND = '🔔 Schedule alert'
-const CANCEL_ALERT_COMMAND = '🔕 Unschedule alerts'
+const CANCEL_ALERT_COMMAND = '🔕 Unschedule alert'
 const KP_PHOTO = 'https://www.whelancameras.ie/image/data/Article/image%202.jpg'
 
 const options = {
-    "parse_mode": "Markdown",
-    "reply_markup": JSON.stringify({
-        "keyboard": [
+    reply_markup: JSON.stringify({
+        one_time_keyboard: true,
+        keyboard: [
             [{text: PHOTO_COMMAND}, {text: VISIBILITY_COMMAND}],
             [{text: SCHEDULE_ALERT_COMMAND}, {text: CANCEL_ALERT_COMMAND}]
-        ],
-        "one_time_keyboard": true
+        ]
     })
 }
 
@@ -44,66 +43,69 @@ bot.onText(new RegExp(VISIBILITY_COMMAND), msg => {
         const forecast = forecastHandler.getForecast()
         const arrowDown = '🔻'
         const arrowUp = '🔺'
-        var message = `Current Kp index is ${forecast.nextH}`
+        var text = `Current Kp index is ${forecast.nextH}`
         if (forecast.next4H == forecast.nextH) {
-            message += ' without major changes within the next 4h.'
+            text += ' without major changes within the next 4h.'
         } else if (forecast.next4H < forecast.nextH) {
-            message += ` and within the next 4h it will decrease to ${forecast.next4H} ${arrowDown}.`
+            text += ` and within the next 4h it will decrease to ${forecast.next4H} ${arrowDown}.`
         } else {
-            message += ` and within the next 4h it will increase to ${forecast.next4H} ${arrowUp}.`
+            text += ` and within the next 4h it will increase to ${forecast.next4H} ${arrowUp}.`
         }
-        bot.sendMessage(msg.from.id, message, options)
+        bot.sendMessage(msg.from.id, text, options)
     })
 })
 
 bot.onText(new RegExp(PHOTO_COMMAND), msg => {
     console.info(`[MSG]Send photo to ${msg.from.first_name}`)
     bot.sendChatAction(msg.from.id, 'typing').then(() => {
-        flickrHandler.fetchRandomPhoto((photo, owner) => {
-            console.log(`Sent photo by ${owner} to ${msg.from.first_name}`)
-            bot.sendPhoto(msg.from.id, photo).then(() => {
-                bot.sendMessage(msg.from.id, `A gorgeous photo by ${owner.replace(/[^a-zA-Z ]/g, "")}.`, options)
-            })
+        return flickrHandler.fetchRandomPhoto()
+    }).then(result => {
+        console.log(`Sent photo by ${result.owner} to ${msg.from.first_name}`)
+        bot.sendPhoto(msg.from.id, result.photo).then(() => {
+            bot.sendMessage(msg.from.id, `A gorgeous photo by ${result.owner}.`, options)
         })
     })
 })
 
 bot.onText(new RegExp(CANCEL_ALERT_COMMAND), msg => {
     console.info(`[MSG]Cancel alert from ${msg.from.first_name}`)
-    bot.sendMessage(msg.from.id, `Ok ${msg.from.first_name}, I won't be sending you any more alerts!`, options)
+    const text = `Ok ${msg.from.first_name}, I won't be sending you any more alerts!`
+    bot.sendMessage(msg.from.id, text, options)
     forecastHandler.deregisterFromAlerts(msg.from.id)
 })
 
 bot.onText(new RegExp(SCHEDULE_ALERT_COMMAND), msg => {
     console.info(`[MSG]Schedule alert for ${msg.from.first_name}`)
     bot.sendPhoto(msg.from.id, KP_PHOTO).then(() => {
-        bot.sendMessage(msg.from.id, 'Choose which Kp index you\'d like to be informed about:', kpOptions)
+        const text = 'Choose which Kp index you\'d like to be informed about:'
+        bot.sendMessage(msg.from.id, text, kpOptions)
         alertInput = true
     })
 })
 
 bot.onText(/\/start/, (msg, match) => {
     console.info(`[MSG]/start from ${msg.from.first_name}`)
-    bot.sendMessage(msg.from.id, `Hey ${msg.from.first_name}! What would you like to do?`, options)
+    const text = `Hey ${msg.from.first_name}! What would you like to do?`
+    bot.sendMessage(msg.from.id, text, options)
 })
 
 bot.on('message', msg => {
-    if (alertInput) {
-        alertInput = false
-        if (!isNaN(parseInt(msg.text))) {
-            const value = parseInt(msg.text)
-            if (value > 0 && value <= 8) {
-                forecastHandler.registerForAlerts(msg.from.first_name, msg.from.id, value)
-                return bot.sendMessage(msg.from.id, `Ok, ${msg.from.first_name}, I will alert you when Kp reaches ${value}.`, options)
-            }
-        }
-        bot.sendMessage(msg.from.id, 'Unrecognized answer. Please choose what you\'d like to do:', options)
+    if (!alertInput) { return }
+    alertInput = false
+    const value = parseInt(msg.text)
+    if (value > 0 && value <= 8) {
+        forecastHandler.registerForAlerts(msg.from.first_name, msg.from.id, value)
+        const text = `Ok, ${msg.from.first_name}, I will alert you when Kp reaches ${value}.`
+        return bot.sendMessage(msg.from.id, text, options)
     }
+    const text = 'Unrecognized answer. Please choose what you\'d like to do:'
+    bot.sendMessage(msg.from.id, text, options)
 })
 
 function onKpAlert(chats, kp) {
     chats.forEach(chat => {
         console.info(`[MSG]Send alert to ${chat.user}`)
-        bot.sendMessage(chat.chatId, `⚠️ Alert! ⚠️ Alert! Current Kp is ${kp}!`)
+        const text = `⚠️ Alert! ⚠️ Alert! Current Kp is ${kp}!`
+        bot.sendMessage(chat.chatId, text)
     })
 }

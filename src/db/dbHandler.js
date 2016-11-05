@@ -8,7 +8,7 @@ var connected = false
 
 function connect() {    
   return new Promise((resolve, reject) => {
-    mongoose.connect(address, (err) => {
+    mongoose.connect(address, err => {
         if (err) {
             connected = false
             reject(err)

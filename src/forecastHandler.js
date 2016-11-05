@@ -3,25 +3,23 @@
 const request = require('request')
 const CronJob = require('cron').CronJob
 const DATA_URL = 'http://services.swpc.noaa.gov/text/wing-kp.txt'
-const dbHandler = require('./db/dbHandler.js')
 const chatModel = require('./db/models/chat.js')
 
 /*
+# Solar Wind Source: ACE Satellite.  Wing Kp data provided by USAF AFWA.
+# The value -1 in the report indicates missing data.
+#
 #                      USAF 15-minute Wing Kp Geomagnetic Activity Index
 #
 #                        1-hour         1-hour        4-hour         4-hour     
 # UT Date   Time      Predicted Time  Predicted    Predicted Time  Predicted   USAF Est.
 # YR MO DA  HHMM      YR MO DA  HHMM    Index      YR MO DA  HHMM    Index        Kp    
 #---------------------------------------------------------------------------------------
+2016 10 29  1800    2016 10 29  1900     4.00    2016 10 29  2200     4.67       3.00
 */
 
-const ALERT_INTERVAL = 60 * 60 * 1000 
-
-dbHandler.connect().then(() => {
-    console.log('Successfully connected to Mongo!')
-}).catch(err => {
-    console.error('Could not connect to mongoDB: ' + err)
-})
+// alert every 2h
+const ALERT_INTERVAL = 2 * 60 * 60 * 1000 
 
 var handler = function (alertCallback) {
 
@@ -30,7 +28,7 @@ var handler = function (alertCallback) {
     var job = null
 
     this.startDaemon = function() {
-        if (job) {return}
+        if (job) { return }
         job = new CronJob('*/16 * * * *', () => {
             fetchData(handleFetchResult)
         }, null, false, 'America/Los_Angeles')
@@ -38,7 +36,7 @@ var handler = function (alertCallback) {
     }
 
     this.stopDaemon = function () {
-        if (!job) {return}
+        if (!job) { return }
         job.stop()
         job = null
     }
@@ -53,7 +51,7 @@ var handler = function (alertCallback) {
                     if (err) { console.error('Error on re-saving model: ' + err) }
                 })
             } else {
-                chatModel.create({user, chatId, kp}, (err, chat) => {
+                chatModel.create({user, chatId, kp}, err => {
                     if (err) { return console.error('Error while creating model: ' + err) }
                 })
             }
@@ -67,7 +65,7 @@ var handler = function (alertCallback) {
     }
 
     this.getForecast = function () {
-        return{nextH, next4H}
+        return { nextH, next4H }
     }
 
     function handleFetchResult(err, next1, next4) {
@@ -93,7 +91,7 @@ var handler = function (alertCallback) {
     function fetchData(completion) {
         request(DATA_URL, (err, response, body) => {
             if (err || response.statusCode != 200 || !body) {
-                return completion(Error('Invalid request!'))
+                return completion(new Error('Invalid request!'))
             }
             const data = parseData(body)
             completion(null, data[4], data[7])
