@@ -180,8 +180,8 @@ skyCams[SWEDEN_OPTION_CAM_2] = {
 skyCams[FINLAND_OPTION_CAM_1] = {
     url: 'http://aurora.fmi.fi/public_service/latest_DYN.jpg',
     location: 'Helsinki, Finland',
-    lat: 60.1640504,
-    lon: 24.7600898
+    lat: 60.170477,
+    lon: 24.932778
 }
 skyCams[FINLAND_OPTION_CAM_2] = {
     url: 'http://www.sgo.fi/Data/RealTime/Kuvat/UCL.jpg',
