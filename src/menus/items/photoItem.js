@@ -16,9 +16,9 @@ class PhotoItem extends BaseItem {
             return flickrHandler.fetchRandomPhoto()
         }).then(result => {
             console.log(`Sent photo by ${result.owner} to ${msg.from.first_name}`)
-            return bot.sendPhoto(msg.from.id, result.photo)
-        }).then(() => {
-            bot.sendMessage(msg.from.id, `A gorgeous photo by ${result.owner}.`, next.options)
+            bot.sendPhoto(msg.from.id, result.photo).then(() => {
+                bot.sendMessage(msg.from.id, `A gorgeous photo by ${result.owner}.`, next.options)
+            })
         })
         
         return next
