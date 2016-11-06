@@ -71,15 +71,13 @@ bot.onText(new RegExp(VISIBILITY_COMMAND), msg => {
     console.info(`[MSG] Visibility check from ${msg.from.first_name}`)
     bot.sendPhoto(msg.from.id, KP_PHOTO).then(() => {
         const forecast = forecastHandler.getForecast()
-        const arrowDown = '🔻'
-        const arrowUp = '🔺'
         var text = `Current Kp index is ${forecast.nextH}`
         if (forecast.next4H == forecast.nextH) {
             text += ' without major changes within the next 4h.'
         } else if (forecast.next4H < forecast.nextH) {
-            text += ` and within the next 4h it will decrease to ${forecast.next4H} ${arrowDown}.`
+            text += ` and within the next 4h it will 🔻 to ${forecast.next4H}.`
         } else {
-            text += ` and within the next 4h it will increase to ${forecast.next4H} ${arrowUp}.`
+            text += ` and within the next 4h it will 🔺 to ${forecast.next4H}.`
         }
         bot.sendMessage(msg.from.id, text, options)
     })
