@@ -138,10 +138,11 @@ bot.on('message', msg => {
                 const text = `SkyCam location: ${skyCams[msg.text].location}`
                 return bot.sendMessage(msg.from.id, text) 
             }).then(() => {
-                return bot.sendPhoto(msg.from.id, `${skyCams[msg.text].url}?${Math.random()}`, options)
+                bot.sendPhoto(msg.from.id, `${skyCams[msg.text].url}?${Math.random()}`, options)
             })
+        } else {
+            return sendUnrecognizedMessage(msg.from.id)
         }
-        return sendUnrecognizedMessage(msg.from.id)
     }
 })
 
