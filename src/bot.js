@@ -194,8 +194,8 @@ skyCams[FINLAND_OPTION_CAM_2] = {
 skyCams[NORWAY_OPTION_CAM_1] = {
     url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg',
     location: 'Tromsø, Norway',
-    lat: 69.6652912,
-    lon: 18.7776692
+    lat: 69.649979,
+    lon: 18.953976
 }
 skyCams[NORWAY_OPTION_CAM_2] = {
     url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Longyearbyen/latest.jpg',
