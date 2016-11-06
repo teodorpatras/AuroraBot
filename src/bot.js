@@ -1,7 +1,7 @@
 'use strict'
 
 const TelegramBot = require('node-telegram-bot-api')
-const bot = new TelegramBot(process.env.TELEGRAM_API_TOKEN, {polling: true})
+const bot = new TelegramBot(process.env.TELEGRAM_API_TOKEN, { polling: true })
 
 const flickrHandler = require('./flickrHandler')
 const ForecastHandler = require('./forecastHandler')
@@ -25,9 +25,9 @@ const options = {
     reply_markup: JSON.stringify({
         one_time_keyboard: true,
         keyboard: [
-            [{text: PHOTO_COMMAND}, {text: VISIBILITY_COMMAND}],
-            [{text: SCHEDULE_ALERT_COMMAND}, {text: CANCEL_ALERT_COMMAND}],
-            [{text: LIVE_PHOTO_COMMAND}]
+            [{ text: PHOTO_COMMAND }, { text: VISIBILITY_COMMAND }],
+            [{ text: SCHEDULE_ALERT_COMMAND }, { text: CANCEL_ALERT_COMMAND }],
+            [{ text: LIVE_PHOTO_COMMAND }]
         ]
     })
 }
@@ -36,9 +36,9 @@ const camOptions = {
     reply_markup: JSON.stringify({
         one_time_keyboard: true,
         keyboard: [
-            [{text: FINLAND_OPTION_CAM_1}, {text: FINLAND_OPTION_CAM_2}],
-            [{text: NORWAY_OPTION_CAM_1}, {text: NORWAY_OPTION_CAM_2}],
-            [{text: SWEDEN_OPTION_CAM_1}, {text: SWEDEN_OPTION_CAM_2}]
+            [{ text: FINLAND_OPTION_CAM_1 }, { text: FINLAND_OPTION_CAM_2 }],
+            [{ text: NORWAY_OPTION_CAM_1 }, { text: NORWAY_OPTION_CAM_2 }],
+            [{ text: SWEDEN_OPTION_CAM_1 }, { text: SWEDEN_OPTION_CAM_2 }]
         ]
     })
 }
@@ -47,8 +47,8 @@ const kpOptions = {
     reply_markup: JSON.stringify({
         one_time_keyboard: true,
         keyboard: [
-            [{ text: '1' }, { text: '2' }, { text: '3'}],
-            [{ text: '4' }, { text: '5' }, { text: '6'}],
+            [{ text: '1' }, { text: '2' }, { text: '3' }],
+            [{ text: '4' }, { text: '5' }, { text: '6' }],
             [{ text: '7' }, { text: '8' }]
         ]
     })
@@ -62,7 +62,7 @@ var camInput = false
 bot.onText(new RegExp(LIVE_PHOTO_COMMAND), msg => {
     invalidateInputs()
     console.info(`[MSG] Live photo request from ${msg.from.first_name}`)
-    const text = 'Choose a sky camera:'
+    const text = 'Choose a SkyCam:'
     bot.sendMessage(msg.from.id, text, camOptions)
     camInput = true
 })
@@ -132,13 +132,13 @@ bot.on('message', msg => {
         sendUnrecognizedMessage(msg.from.id)
     } else if (camInput) {
         camInput = false
-        const photos = getLivePhotos()
-        if (photos[msg.text]) {
-            return bot.sendChatAction(msg.from.id, 'typing').then(() => {
-                return bot.sendPhoto(msg.from.id, `${photos[msg.text].url}?${Math.random()}`)
+        if (skyCams[msg.text]) {
+            bot.sendChatAction(msg.from.id, 'typing')
+            bot.sendLocation(msg.from.id, skyCams[msg.text].lat, skyCams[msg.text].lon).then(() => {
+                const text = `SkyCam location: ${skyCams[msg.text].location}`
+                return bot.sendMessage(msg.from.id, text) 
             }).then(() => {
-                const text = `Here's a photo from ${photos[msg.text].location}.`
-                bot.sendMessage(msg.from.id, text, options)
+                bot.sendPhoto(msg.from.id, `${skyCams[msg.text].url}?${Math.random()}`, options)
             })
         }
         return sendUnrecognizedMessage(msg.from.id)
@@ -152,17 +152,6 @@ function invalidateInputs() {
     camInput = false
 }
 
-function getLivePhotos() {
-    var dict = {}
-    dict[SWEDEN_OPTION_CAM_1] = {url: 'http://uk.jokkmokk.jp/photo/nr3/latest.jpg', location: 'Porjus, Jokkmokk, Sweden'}
-    dict[SWEDEN_OPTION_CAM_2] = {url: 'http://www.aurora-service.eu/scripts/images/kiruna_aurora_sky_camera.jpg', location: 'Kiruna, Sweden'}
-    dict[FINLAND_OPTION_CAM_1] = {url: 'http://aurora.fmi.fi/public_service/latest_DYN.jpg', location: 'Helsinki, Finland'}
-    dict[FINLAND_OPTION_CAM_2] = {url: 'http://www.sgo.fi/Data/RealTime/Kuvat/UCL.jpg', location: 'Sodankylä, Finland'}
-    dict[NORWAY_OPTION_CAM_1] = {url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg', location: 'Tromsø, Norway'}
-    dict[NORWAY_OPTION_CAM_2] = {url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Longyearbyen/latest.jpg', location: 'Svalbard Islands, Norway'}
-    return dict
-}
-
 function sendUnrecognizedMessage(chatId) {
     const text = 'Unrecognized answer. Please choose what you\'d like to do:'
     bot.sendMessage(chatId, text, options)
@@ -174,4 +163,42 @@ function onKpAlert(chats, kp) {
         const text = `⚠️ Alert! ⚠️ Alert! Current Kp is ${kp}!`
         bot.sendMessage(chat.chatId, text)
     })
+}
+
+var skyCams = {}
+skyCams[SWEDEN_OPTION_CAM_1] = {
+    url: 'http://uk.jokkmokk.jp/photo/nr3/latest.jpg',
+    location: 'Porjus, Jokkmokk, Sweden',
+    lat: 66.9592515,
+    lon: 19.8130181
+}
+skyCams[SWEDEN_OPTION_CAM_2] = {
+    url: 'http://www.aurora-service.eu/scripts/images/kiruna_aurora_sky_camera.jpg',
+    location: 'Kiruna, Sweden',
+    lat: 67.8537517,
+    lon: 20.1863908
+}
+skyCams[FINLAND_OPTION_CAM_1] = {
+    url: 'http://aurora.fmi.fi/public_service/latest_DYN.jpg',
+    location: 'Helsinki, Finland',
+    lat: 60.1640504,
+    lon: 24.7600898
+}
+skyCams[FINLAND_OPTION_CAM_2] = {
+    url: 'http://www.sgo.fi/Data/RealTime/Kuvat/UCL.jpg',
+    location: 'Sodankylä, Finland',
+    lat: 67.416001,
+    lon: 26.586784
+}
+skyCams[NORWAY_OPTION_CAM_1] = {
+    url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Tromso/latest.jpg',
+    location: 'Tromsø, Norway',
+    lat: 69.6652912,
+    lon: 18.7776692
+}
+skyCams[NORWAY_OPTION_CAM_2] = {
+    url: 'http://polaris.nipr.ac.jp/~acaurora/aurora/Longyearbyen/latest.jpg',
+    location: 'Svalbard Islands, Norway',
+    lat: 78.5044091,
+    lon: 13.0690518
 }
