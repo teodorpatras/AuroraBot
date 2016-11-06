@@ -21,7 +21,7 @@ const chatModel = require('./db/models/chat.js')
 // alert every 2h
 const ALERT_INTERVAL = 2 * 60 * 60 * 1000 
 
-var handler = function (alertCallback) {
+var handler = function (bot, alertCallback) {
 
     var nextH = '-1'
     var next4H = '-1'
@@ -84,7 +84,7 @@ var handler = function (alertCallback) {
                     chat.save()
                 }
             })
-            alertCallback(chats, nextH)
+            alertCallback(bot, chats, nextH)
         })
     }
 
