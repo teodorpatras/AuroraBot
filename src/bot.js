@@ -21,6 +21,10 @@ const SWEDEN_OPTION_CAM_2 = '🇸🇪 Sweden #2'
 const NORWAY_OPTION_CAM_1 = '🇳🇴 Norway #1'
 const NORWAY_OPTION_CAM_2 = '🇳🇴 Norway #2'
 
+const COMMANDS = [PHOTO_COMMAND, VISIBILITY_COMMAND, SCHEDULE_ALERT_COMMAND, 
+                  CANCEL_ALERT_COMMAND, LIVE_PHOTO_COMMAND, FINLAND_OPTION_CAM_1, FINLAND_OPTION_CAM_2,
+                  SWEDEN_OPTION_CAM_1, SWEDEN_OPTION_CAM_2, NORWAY_OPTION_CAM_1, NORWAY_OPTION_CAM_2]
+
 const options = {
     reply_markup: JSON.stringify({
         one_time_keyboard: true,
@@ -141,6 +145,8 @@ bot.on('message', msg => {
         } else {
             return sendUnrecognizedMessage(msg.from.id)
         }
+    } else if (COMMANDS.indexOf(msg.text) == -1){
+        sendUnrecognizedMessage(msg.from.id)
     }
 })
 
