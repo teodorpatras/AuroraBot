@@ -1,5 +1,3 @@
-'use strict'
-
 const request = require('request')
 
 const FLICKR_PHOTOS = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&tags=aurora+borealis&format=json&nojsoncallback=1'

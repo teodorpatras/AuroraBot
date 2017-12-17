@@ -1,5 +1,3 @@
-'use strict'
-
 const TelegramBot = require('node-telegram-bot-api')
 const bot = new TelegramBot(process.env.TELEGRAM_API_TOKEN, { polling: true })
 
@@ -12,7 +10,7 @@ const VISIBILITY_COMMAND = '🔎  Visibility'
 const SCHEDULE_ALERT_COMMAND = '🔔 Schedule alert'
 const CANCEL_ALERT_COMMAND = '🔕 Unschedule alert'
 const LIVE_PHOTO_COMMAND = '📷 Live photo'
-const KP_PHOTO = 'https://www.whelancameras.ie/image/data/Article/image%202.jpg'
+const KP_PHOTO = 'https://www.dronewatch.nl/wp-content/uploads/2016/03/Kp-index.jpeg'
 
 const FINLAND_OPTION_CAM_1 = '🇫🇮 Finland #1'
 const FINLAND_OPTION_CAM_2 = '🇫🇮 Finland #2'
@@ -184,7 +182,7 @@ skyCams[SWEDEN_OPTION_CAM_2] = {
     lon: 20.1863908
 }
 skyCams[FINLAND_OPTION_CAM_1] = {
-    url: 'http://aurora.fmi.fi/public_service/latest_DYN.jpg',
+    url: 'http://aurorasnow.fmi.fi/public_service/images/latest_DYN.jpg',
     location: 'Helsinki, Finland',
     lat: 60.170477,
     lon: 24.932778

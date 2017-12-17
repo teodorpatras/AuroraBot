@@ -1,5 +1,3 @@
-'use strict'
-
 const express = require('express')
 const bot = require('./bot.js')
 const dbHandler = require('./db/dbHandler')

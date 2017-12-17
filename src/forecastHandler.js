@@ -1,5 +1,3 @@
-'use strict'
-
 const request = require('request')
 const CronJob = require('cron').CronJob
 const DATA_URL = 'http://services.swpc.noaa.gov/text/wing-kp.txt'
