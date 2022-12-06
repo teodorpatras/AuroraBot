@@ -20,7 +20,7 @@
   "homepage": "https://github.com/teodorpatras/AuroraBot#readme",
   "dependencies": {
     "cron": "1.1.1",
-    "express": "4.14.0",
+    "express": "4.17.3",
     "mongoose": "4.6.6",
     "node-telegram-bot-api": "0.24.0",
     "request": "2.78.0"
